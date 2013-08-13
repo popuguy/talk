@@ -1,0 +1,76 @@
+<script src="jquery.js"></script>
+<script type="text/javascript">
+function animateBackgroundColor(obj) {
+    $(obj).addClass('selected-back');
+    $('.selected-back').not(obj).removeClass('selected-back');
+}
+$(document).ready(function() {
+    $(".inside-post").click(function(event){
+        animateBackgroundColor(this);
+        var selectedTextBlock = $(this).find("#"+$(this).attr('id')+"Text");
+        selectedTextBlock.show();
+        selectedTextBlock.animate({height:80},100,"linear");
+        $('.comment-block').not(selectedTextBlock)
+            .animate({height:0},100,"linear",
+            function(){$('.comment-block').not(selectedTextBlock).hide();})
+        selectedTextBlock.focus();
+        event.stopPropagation();
+    });
+    $(".post").click(function(event){
+        animateBackgroundColor(this);
+        var selectedTextBlock = $(this).find("#"+$(this).attr('id')+"Text");
+        selectedTextBlock.show();
+        selectedTextBlock.animate({height:80},100,"linear");
+        $('.comment-block').not(selectedTextBlock)
+            .animate({height:0},100,"linear",
+            function(){$('.comment-block').not(selectedTextBlock).hide();})
+        selectedTextBlock.focus();
+        event.stopPropagation();
+    });
+    $(".post-content").click(function(event){
+        animateBackgroundColor(this.parent());
+        var selectedTextBlock = $(this).parent()
+            .find("#"+$(this).attr('id')+"Text");
+        selectedTextBlock.show();
+        selectedTextBlock.animate({height:80},100,"linear");
+        $('.comment-block').not(selectedTextBlock)
+            .animate({height:0},100,"linear",
+            function(){$('.comment-block').not(selectedTextBlock).hide();})
+        selectedTextBlock.focus();
+        event.stopPropagation();    
+    });
+});
+</script>
+<div id="title-text">TALK</div>
+<div class="post" id="p1">
+    <div class="post-content">
+        WOW HOW INTERESTING
+    </div>
+    <div class="inside-post" id="p2">
+        <div class="post-content">
+            MULTIPLE</br>LINE</br>POST</br>LOL
+        </div>
+        <div class="inside-post" id="p3">
+            <div class="post-content">
+                THREE</br>LAYERS</br>DEEP
+            </div>
+            <div class="comment-block-container">
+                <textarea class="comment-block" id="p3Text" placeholder="Comment"></textarea>
+            </div>
+        </div>
+        <div class="comment-block-container">
+            <textarea class="comment-block" id="p2Text" placeholder="Comment"></textarea>
+        </div>
+    </div>
+    <div class="inside-post" id="p4">
+        <div class="post-content">
+            SECOND POST INSIDE OF ONE COMMENT CHAIN THAT IS LONG ENOUGH TO LOOP OVER A LINE AS A TEST
+        </div> 
+        <div class="comment-block-container">
+            <textarea class="comment-block" id="p4Text" placeholder="Comment"></textarea>
+        </div>
+    </div>
+    <div class="comment-block-container">
+        <textarea class="comment-block" id="p1Text" placeholder="Comment"></textarea>
+    </div>
+</div>
