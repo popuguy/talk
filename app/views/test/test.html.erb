@@ -55,7 +55,7 @@ end
 def render_post_chain(post, posts) %>
     <div class="<%= if post.reply; "inside-post"; else "post"; end %>" id="<%= "p#{post.id.to_s}" %>">
         <div class="post-content">
-            <%= post.content %>
+            <%= h post.content %>
         </div>
         <% get_post_children(post, posts).each do |child|
             render_post_chain(child, posts)
