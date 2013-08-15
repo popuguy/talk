@@ -1,4 +1,5 @@
 Talk::Application.routes.draw do
+  get "posts/new"
   get 'test/test'
   #match '/',  to: 'test',            via: 'get'
   # The priority is based upon order of creation: first created -> highest priority.

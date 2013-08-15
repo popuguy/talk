@@ -42,35 +42,38 @@ $(document).ready(function() {
 });
 </script>
 <div id="title-text">TALK</div>
-<div class="post" id="p1">
-    <div class="post-content">
-        WOW HOW INTERESTING
-    </div>
-    <div class="inside-post" id="p2">
+<%
+def get_post_children(parent, posts)
+    children = []
+    posts.each do |post|
+        if post.reply == parent.id
+            children << post
+        end
+    end
+    return children
+end 
+def render_post_chain(post, posts) %>
+    <div class="<%= if post.reply; "inside-post"; else "post"; end %>" id="<%= "p#{post.id.to_s}" %>">
         <div class="post-content">
-            MULTIPLE</br>LINE</br>POST</br>LOL
+            <%= post.content %>
         </div>
-        <div class="inside-post" id="p3">
-            <div class="post-content">
-                THREE</br>LAYERS</br>DEEP
-            </div>
-            <div class="comment-block-container">
-                <textarea class="comment-block" id="p3Text" placeholder="Comment"></textarea>
-            </div>
-        </div>
+        <% get_post_children(post, posts).each do |child|
+            render_post_chain(child, posts)
+        end %>
         <div class="comment-block-container">
-            <textarea class="comment-block" id="p2Text" placeholder="Comment"></textarea>
+            <textarea class="comment-block" id="<%= "p#{post.id.to_s}Text" %>" placeholder="Comment"></textarea>
         </div>
     </div>
-    <div class="inside-post" id="p4">
-        <div class="post-content">
-            SECOND POST INSIDE OF ONE COMMENT CHAIN THAT IS LONG ENOUGH TO LOOP OVER A LINE AS A TEST
-        </div> 
-        <div class="comment-block-container">
-            <textarea class="comment-block" id="p4Text" placeholder="Comment"></textarea>
-        </div>
-    </div>
-    <div class="comment-block-container">
-        <textarea class="comment-block" id="p1Text" placeholder="Comment"></textarea>
-    </div>
-</div>
+<% end
+def get_top_level_posts(posts)
+    top_level = []
+    posts.each do |post|
+        if not post.reply
+            top_level << post
+        end
+    end
+    return top_level
+end
+get_top_level_posts(Post.all).each do |post|
+    render_post_chain(post, Post.all)
+end %>
