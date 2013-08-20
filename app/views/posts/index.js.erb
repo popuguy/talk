@@ -1,0 +1,46 @@
+<% unless @posts.empty? %>
+
+function createNewResponse(id, content, parent){
+	var newPostContent = 
+	"<div class=\"inside-post\" id=\"p" + id + "\">" +
+		"<div class=\"post-content\">" +
+			content +
+		"</div>" + 
+		"<div class=\"comment-block-container\">" +
+			"<textarea id=\"p" + id + "Text\" class=\"comment-block\"" + 
+				      "placeholder=\"Comment\" style=\"height: 0px; " +
+				      "display: none;\">" +
+		    "</textarea>" +
+	    "</div>" +
+	"</div>";
+	$("#p"+parent+"Text").parent().before(newPostContent);
+	animateEntrance(id);
+}
+function createNewTopLevel(id, content){
+	var newPostContent = 
+	"<div class=\"post\" id=\"p" + id + "\">" +
+		"<div class=\"post-content\">" +
+			content +
+		"</div>" + 
+		"<div class=\"comment-block-container\">" +
+			"<textarea id=\"p" + id + "Text\" class=\"comment-block\"" + 
+				      "placeholder=\"Comment\" style=\"height: 0px; " +
+				      "display: none;\">" +
+		    "</textarea>" +
+	    "</div>" +
+	"</div>";
+	$("#footer").before(newPostContent);
+	animateEntrance(id);
+}
+function animateEntrance(id){
+	var newPost = $(document).find("#p"+id)
+	newPost.hide();
+	var oldHeight = newPost.height();
+	newPost.attr('style', 'height: 0px')
+	newPost.show();
+	newPost.animate({'height':oldHeight},300,"linear", 
+		function(){newPost.attr('style', 'height: auto');});
+
+}
+createNewResponse(i, "DYNAMIC RESPONSE #" + i++, 4);
+<% end %>

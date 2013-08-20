@@ -4,41 +4,37 @@ function animateBackgroundColor(obj) {
     $(obj).addClass('selected-back');
     $('.selected-back').not(obj).removeClass('selected-back');
 }
+var i = 5;
 $(document).ready(function() {
-    $(".inside-post").click(function(event){
+    var lastBlock = '';
+    $(document).on('click', '.inside-post', function(event){
         animateBackgroundColor(this);
-        var selectedTextBlock = $(this).find("#"+$(this).attr('id')+"Text");
+        var selectedTextBlock = $(document).find("#"+$(this).attr('id')+"Text");
+        selectedTextBlock.show();
+        selectedTextBlock.animate({height:80},100,"linear");
+        if (lastBlock != '' && lastBlock != selectedTextBlock.attr('id')){
+            $(document).find('#' + lastBlock)
+                .animate({height:0},100,"linear",
+                function(){$('.comment-block').not(selectedTextBlock).hide();})
+            selectedTextBlock.focus();
+        }
+        lastBlock = selectedTextBlock.attr('id');
+        event.stopPropagation();
+    });
+    $(document).on('click', '.post', function(event){
+        animateBackgroundColor(this);
+        var selectedTextBlock = $(document).find("#"+$(this).attr('id')+"Text");
         selectedTextBlock.show();
         selectedTextBlock.animate({height:80},100,"linear");
         $('.comment-block').not(selectedTextBlock)
             .animate({height:0},100,"linear",
-            function(){$('.comment-block').not(selectedTextBlock).hide();})
+            function(){$('.comment-block').not(selectedTextBlock).hide();});
         selectedTextBlock.focus();
         event.stopPropagation();
     });
-    $(".post").click(function(event){
-        animateBackgroundColor(this);
-        var selectedTextBlock = $(this).find("#"+$(this).attr('id')+"Text");
-        selectedTextBlock.show();
-        selectedTextBlock.animate({height:80},100,"linear");
-        $('.comment-block').not(selectedTextBlock)
-            .animate({height:0},100,"linear",
-            function(){$('.comment-block').not(selectedTextBlock).hide();})
-        selectedTextBlock.focus();
-        event.stopPropagation();
-    });
-    $(".post-content").click(function(event){
-        animateBackgroundColor(this.parent());
-        var selectedTextBlock = $(this).parent()
-            .find("#"+$(this).attr('id')+"Text");
-        selectedTextBlock.show();
-        selectedTextBlock.animate({height:80},100,"linear");
-        $('.comment-block').not(selectedTextBlock)
-            .animate({height:0},100,"linear",
-            function(){$('.comment-block').not(selectedTextBlock).hide();})
-        selectedTextBlock.focus();
-        event.stopPropagation();    
-    });
+    setInterval(function(){
+        $.getScript("../posts/index.js");
+    }, 5000);
 });
 </script>
 <div id="title-text">TALK</div>
@@ -72,8 +68,9 @@ def get_top_level_posts(posts)
             top_level << post
         end
     end
-    return top_level
+    return top_level;
 end
 get_top_level_posts(Post.all).each do |post|
     render_post_chain(post, Post.all)
 end %>
+<div id="footer"></div>
